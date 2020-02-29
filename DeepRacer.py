@@ -10,7 +10,7 @@ def reward_function(params):
     off_track = params['is_offtrack']
     is_reversed = params['is_reversed']
     left = params['is_left_of_center']
-    speed = params['']
+    speed = params['speed']
 
     marker_1 = 0.1 * track_width
     marker_2 = 0.25 * track_width
@@ -40,6 +40,10 @@ def reward_function(params):
     # Penalize reward if the agent is steering too much
     if steering > ABS_STEERING_THRESHOLD:
         reward *= 0.8
+    if speed < 1.0:
+        reward *= 0.80
+    else:
+        reward += speed
 
 
     return float(reward)
