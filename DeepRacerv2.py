@@ -6,7 +6,8 @@ def reward_function(params):
     # Read input parameters
     track_width = params['track_width']
     distance_from_center = params['distance_from_center']
-    
+    steering = abs(params['steering_angle'])
+    is_reversed = params['is_reversed']
     left = params['is_left_of_center']
     speed = params['speed']
     
@@ -35,4 +36,15 @@ def reward_function(params):
     else:
         reward += speed
     
+    # add penalty for going in the wrong direction
+    if is_reversed:
+        reward = 1e-3
+        
+    # Steering penality threshold, change the number based on your action space setting
+    ABS_STEERING_THRESHOLD = 15
+
+    # Penalize reward if the agent is steering too much
+    if steering > ABS_STEERING_THRESHOLD:
+        reward *= 0.8
+       
     return float(reward)
